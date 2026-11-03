@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" data-density="normal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Plataforma comercial da Ascensão Comercial — CRM, Performance e Financeiro.">
+  <meta name="theme-color" content="#08090C">
+  <title>Ascensão Comercial · Plataforma Comercial</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/brand/icon-orange.svg">
+  <link rel="apple-touch-icon" href="assets/brand/icon-orange.svg">
+
+  <!-- Fontes (opcional: se estiver offline, o stack de fallback assume) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap">
+
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/charts.css">
+  <link rel="stylesheet" href="assets/css/finance-workspace.css">
+  <link rel="stylesheet" href="assets/css/finance-glass.css">
+  <link rel="stylesheet" href="assets/css/lead-workspace.css">
+  <link rel="stylesheet" href="assets/css/activity-workspace.css">
+  <link id="pipeline-workspace-css" rel="stylesheet" href="assets/css/pipeline-workspace.css">
+
+  <style>
+    /* Utilitários dependentes de viewport que só fazem sentido no shell */
+    .only-mobile { display: none; }
+    @media (max-width: 1024px) {
+      .only-desk { display: none; }
+      .only-mobile { display: inline-flex; }
+    }
+    /* Tela de carregamento antes do primeiro render */
+    #boot {
+      position: fixed; inset: 0; z-index: 500;
+      display: grid; place-items: center; gap: 18px;
+      background: var(--bg);
+      transition: opacity 260ms var(--ease-out);
+    }
+    #boot.is-gone { opacity: 0; pointer-events: none; }
+    #boot img { width: 54px; height: 54px; animation: boot-pulse 1.5s var(--ease-in-out) infinite; }
+    @keyframes boot-pulse {
+      0%, 100% { transform: scale(1); opacity: .85 }
+      50%      { transform: scale(1.08); opacity: 1 }
+    }
+    #boot small {
+      font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--ink-4); font-weight: 700;
+    }
+    noscript { display: block; padding: 40px; text-align: center; color: var(--ink-2); }
+  </style>
+</head>
+<body>
+
+<div id="boot">
+  <div style="display:grid;place-items:center;gap:14px">
+    <img src="assets/brand/icon-orange.svg" alt="Ascensão Comercial">
+    <small>Carregando plataforma</small>
+  </div>
+</div>
+
+<noscript>
+  Esta plataforma precisa de JavaScript ativo para funcionar.
+</noscript>
+
+<div id="app"></div>
+
+<script type="module" src="/assets/js/main.js"></script>
+
+<script>
+  (function () {
+    function esconder() {
+      var b = document.getElementById('boot');
+      if (!b) return;
+      b.classList.add('is-gone');
+      setTimeout(function () { b.remove(); }, 300);
+    }
+    window.addEventListener('ascensao:ready', function () { setTimeout(esconder, 120); });
+    setTimeout(esconder, 8000);
+  })();
+</script>
+</body>
+</html>

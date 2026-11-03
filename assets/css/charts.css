@@ -1,0 +1,182 @@
+/* ==========================================================================
+   ASCENSÃO COMERCIAL — Gráficos (SVG puro, sem biblioteca)
+   ========================================================================== */
+
+.chart { position: relative; width: 100%; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+/* eixos e grade */
+.ch-grid line { stroke: var(--grid-line); stroke-width: 1; shape-rendering: crispEdges; }
+.ch-axis text {
+  fill: var(--ink-3);
+  font-size: 10px; font-weight: 600;
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.ch-axis line { stroke: var(--line); stroke-width: 1; }
+
+/* linha e área */
+.ch-line {
+  fill: none; stroke-width: 2.25;
+  stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: var(--len, 2000);
+  stroke-dashoffset: var(--len, 2000);
+  animation: draw-line var(--dur-4) var(--ease-out) forwards;
+}
+.ch-line--dash { stroke-dasharray: 5 5; stroke-dashoffset: 0; animation: fade-in var(--dur-4) var(--ease-out); opacity: .75; }
+.ch-area { animation: fade-in var(--dur-4) var(--ease-out) both; animation-delay: 120ms; }
+
+/* pontos */
+.ch-pt {
+  r: 0; stroke: var(--bg-elev-1); stroke-width: 2;
+  transition: r var(--dur-2) var(--ease-spring);
+}
+.chart:hover .ch-pt, .ch-pt.is-on { r: 4.5; }
+
+/* barras */
+.ch-bar {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: grow-y var(--dur-4) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 32ms);
+  transition: opacity var(--dur-1) var(--ease-out), filter var(--dur-1) var(--ease-out);
+}
+.ch-bar:hover { filter: brightness(1.15); }
+.chart.is-hovering .ch-bar:not(.is-on) { opacity: .38; }
+
+.ch-bar-h {
+  transform-box: fill-box; transform-origin: left;
+  animation: grow-x var(--dur-4) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+@keyframes grow-x { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+
+/* rótulos de valor sobre a série */
+.ch-val {
+  fill: var(--ink); font-size: 10.5px; font-weight: 700;
+  font-family: var(--font-ui); font-variant-numeric: tabular-nums;
+  text-anchor: middle;
+  animation: fade-in var(--dur-4) var(--ease-out) both;
+  animation-delay: 320ms;
+}
+.ch-val--dim { fill: var(--ink-3); font-weight: 600; }
+
+/* cursor vertical do hover */
+.ch-cursor { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 3 3; pointer-events: none; }
+.ch-hit { fill: transparent; cursor: crosshair; }
+
+/* rosca / donut */
+.ch-arc {
+  transition: transform var(--dur-2) var(--ease-spring), opacity var(--dur-2) var(--ease-out);
+  transform-box: fill-box; transform-origin: center;
+  cursor: pointer;
+}
+.ch-arc:hover { transform: scale(1.035); }
+.chart.is-hovering .ch-arc:not(.is-on) { opacity: .35; }
+.ch-donut-center {
+  text-anchor: middle;
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.ch-donut-center .v { fill: var(--ink); font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.ch-donut-center .l { fill: var(--ink-3); font-size: 10px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; }
+
+/* Entrada que NÃO toca em opacity.
+   Animação CSS sobrescreve atributo de apresentação SVG: usar pop-in aqui
+   apagaria o opacity que carrega informação (intensidade do heatmap,
+   preenchimento translúcido do funil). */
+@keyframes seg-in { from { transform: scaleX(.55) } to { transform: none } }
+@keyframes cell-in { from { transform: scale(.4) } to { transform: none } }
+
+/* funil */
+.ch-funnel-seg {
+  transition: filter var(--dur-2) var(--ease-out);
+  transform-box: fill-box; transform-origin: center;
+  animation: seg-in var(--dur-3) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+  cursor: pointer;
+}
+.ch-funnel-seg:hover { filter: brightness(1.14); }
+.ch-funnel-drop {
+  fill: var(--bad-500); font-size: 10px; font-weight: 700;
+  font-family: var(--font-ui); text-anchor: middle;
+}
+
+/* heatmap */
+.ch-cell {
+  rx: 3; ry: 3;
+  transition: transform var(--dur-1) var(--ease-spring), stroke var(--dur-1) var(--ease-out);
+  transform-box: fill-box; transform-origin: center;
+  cursor: pointer;
+  /* cell-in anima só a escala: o opacity de cada célula é o dado */
+  animation: cell-in var(--dur-3) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 5ms);
+}
+.ch-cell:hover { transform: scale(1.22); stroke: var(--ink); stroke-width: 1.5; }
+
+/* medidor radial */
+.ch-gauge-track { fill: none; stroke: var(--bg-elev-2); stroke-linecap: round; }
+.ch-gauge-fill {
+  fill: none; stroke-linecap: round;
+  stroke-dasharray: var(--len, 400);
+  stroke-dashoffset: var(--len, 400);
+  animation: draw-line var(--dur-5) var(--ease-out) forwards;
+}
+
+/* sparkline em célula de tabela */
+.spark { width: 76px; height: 24px; display: block; overflow: visible; }
+.spark path { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.spark .fill { stroke: none; opacity: .16; }
+
+/* legenda */
+.ch-legend {
+  display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4);
+  margin-top: var(--sp-3);
+}
+.ch-legend button {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--fs-xs); font-weight: 600; color: var(--ink-3);
+  transition: color var(--dur-2) var(--ease-out), opacity var(--dur-2) var(--ease-out);
+}
+.ch-legend button:hover { color: var(--ink); }
+.ch-legend button.is-off { opacity: .38; }
+.ch-legend i {
+  width: 9px; height: 9px; border-radius: 2.5px;
+  background: var(--c); flex: none;
+}
+.ch-legend i.line { width: 14px; height: 2.5px; border-radius: 2px; }
+
+/* tooltip de gráfico */
+.ch-tip {
+  position: absolute; z-index: 5;
+  padding: var(--sp-2) var(--sp-3);
+  min-width: 130px;
+  background: var(--bg-elev-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-3);
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 12px));
+  transition: opacity var(--dur-1) var(--ease-out);
+  font-variant-numeric: tabular-nums;
+}
+.ch-tip__t { font-size: var(--fs-2xs); color: var(--ink-3); font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
+.ch-tip__r { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); margin-top: 3px; }
+.ch-tip__r i { width: 8px; height: 8px; border-radius: 2px; background: var(--c); flex: none; }
+.ch-tip__r b { margin-left: auto; font-weight: 700; color: var(--ink); }
+.ch-tip__r span { color: var(--ink-3); }
+
+/* barra empilhada horizontal 100% (mix de produtos, origens) */
+.stackbar {
+  display: flex; width: 100%; height: 12px;
+  border-radius: var(--r-full); overflow: hidden;
+  background: var(--bg-elev-2);
+}
+.stackbar > i {
+  display: block; height: 100%; background: var(--c);
+  transform-origin: left;
+  animation: grow-x var(--dur-4) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+  transition: filter var(--dur-1) var(--ease-out);
+}
+.stackbar > i:hover { filter: brightness(1.2); }

@@ -1,0 +1,91 @@
+# Segredos e configuracoes de ambiente
+.env
+.env.*
+!.env.example
+*.env
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+credentials*.json
+secrets*.json
+service-account*.json
+
+# Configuracoes locais de ferramentas/assistentes
+.claude/
+.codex/
+
+# Dependencias JavaScript e caches de gerenciadores
+node_modules/
+.npm/
+.yarn/
+.pnpm-store/
+.pnp.*
+
+# Saidas de build, cobertura e caches
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+.vite/
+.turbo/
+coverage/
+*.tsbuildinfo
+
+# Dados locais, bancos, exports e backups potencialmente sensiveis
+data/
+storage/
+uploads/
+exports/
+backups/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+*.dump
+*.sql
+!supabase/**/*.sql
+*.csv
+*.xlsx
+
+# Logs, processos e temporarios
+logs/
+*.log
+*.pid
+*.seed
+*.tmp
+*.temp
+*.swp
+*.swo
+*.orig
+*.rej
+
+# Editores e sistema operacional
+.idea/
+.vscode/
+*.code-workspace
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Relatorios e artefatos de testes de navegador
+playwright-report/
+test-results/
+screenshots/
+*.har
+supabase/.branches/
+supabase/.temp/
+.env*
+
+.vercel/
+
+# Artefatos locais e vinculação pessoal de administrador
+/work/
+/outputs/
+/supabase/bootstrap-*-admin.sql

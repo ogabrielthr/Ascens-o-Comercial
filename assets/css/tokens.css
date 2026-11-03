@@ -1,0 +1,188 @@
+/* ==========================================================================
+   ASCENSÃO COMERCIAL — Design Tokens
+   Fonte única de verdade para cor, tipografia, espaço, raio, sombra e motion.
+   Trocar um valor aqui muda o sistema inteiro.
+   ========================================================================== */
+
+:root {
+  /* ---------- Marca ---------------------------------------------------- */
+  --brand-50:  #FFF7E6;
+  --brand-100: #FFE9BF;
+  --brand-200: #FFD98F;
+  --brand-300: #FFC34C;
+  --brand-400: #FFAF00;
+  --brand-500: #FF9500;   /* cor primária */
+  --brand-600: #F07800;
+  --brand-700: #C25E00;
+  --brand-800: #8F4500;
+  --brand-900: #5C2C00;
+
+  --brand-grad:      linear-gradient(135deg, #FFC34C 0%, #FF9500 48%, #F07800 100%);
+  --brand-grad-soft: linear-gradient(135deg, rgba(255,195,76,.16) 0%, rgba(255,149,0,.08) 100%);
+  --brand-glow:      0 0 0 1px rgba(255,149,0,.28), 0 8px 28px -8px rgba(255,149,0,.45);
+
+  /* ---------- Semântica ------------------------------------------------ */
+  --ok-500:    #2DD4A7;   --ok-600:   #14B88C;   --ok-soft:   rgba(45,212,167,.14);
+  --warn-500:  #FBBF24;   --warn-600: #E0A008;   --warn-soft: rgba(251,191,36,.14);
+  --bad-500:   #FB6E6E;   --bad-600:  #E14848;   --bad-soft:  rgba(251,110,110,.14);
+  --info-500:  #5AB9F5;   --info-600: #2E97DD;   --info-soft: rgba(90,185,245,.14);
+  --plum-500:  #A78BFA;                          --plum-soft: rgba(167,139,250,.14);
+
+  /* ---------- Série de dados (validada para dark + light) --------------- */
+  --series-1: #FF9500;
+  --series-2: #5AB9F5;
+  --series-3: #2DD4A7;
+  --series-4: #A78BFA;
+  --series-5: #FB6E6E;
+  --series-6: #FBBF24;
+  --series-7: #64D2FF;
+  --series-8: #F472B6;
+
+  /* ---------- Tipografia ----------------------------------------------- */
+  --font-ui: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont,
+             "Segoe UI Variable Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Instrument Serif", "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "Cascadia Mono",
+               Consolas, "Liberation Mono", monospace;
+
+  /* escala tipográfica — passo 1.2 a partir de 14px */
+  --fs-2xs: .6875rem;  /* 11 */
+  --fs-xs:  .75rem;    /* 12 */
+  --fs-sm:  .8125rem;  /* 13 */
+  --fs-md:  .875rem;   /* 14 — corpo padrão da UI */
+  --fs-lg:  1rem;      /* 16 */
+  --fs-xl:  1.125rem;  /* 18 */
+  --fs-2xl: 1.375rem;  /* 22 */
+  --fs-3xl: 1.75rem;   /* 28 */
+  --fs-4xl: 2.25rem;   /* 36 */
+  --fs-5xl: 3rem;      /* 48 */
+
+  --lh-tight: 1.15;
+  --lh-snug:  1.35;
+  --lh-base:  1.55;
+
+  --tracking-tight: -.02em;
+  --tracking-wide:  .06em;
+  --tracking-caps:  .12em;
+
+  /* ---------- Espaço (base 4) ------------------------------------------ */
+  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 20px;  --sp-6: 24px;  --sp-7: 32px;  --sp-8: 40px;
+  --sp-9: 48px;  --sp-10: 64px; --sp-11: 80px;
+
+  /* densidade — alternada pelo toggle no topo */
+  --density: 1;
+  --row-h: calc(44px * var(--density));
+  --field-h: calc(38px * var(--density));
+
+  /* ---------- Raio ----------------------------------------------------- */
+  --r-xs: 6px;  --r-sm: 8px;  --r-md: 12px;
+  --r-lg: 16px; --r-xl: 20px; --r-2xl: 28px; --r-full: 999px;
+
+  /* ---------- Layout --------------------------------------------------- */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 72px;
+  --topbar-h: 60px;
+  --content-max: 1440px;
+
+  /* ---------- Motion --------------------------------------------------- */
+  --ease-out:    cubic-bezier(.22, 1, .36, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+
+  --dur-1: 110ms;   /* feedback imediato: hover, press */
+  --dur-2: 180ms;   /* troca de estado */
+  --dur-3: 280ms;   /* entrada de elemento */
+  --dur-4: 460ms;   /* transição de página, desenho de gráfico */
+  --dur-5: 900ms;   /* count-up, animações narrativas */
+
+  --z-base: 1; --z-sticky: 40; --z-drawer: 60; --z-modal: 80;
+  --z-toast: 90; --z-palette: 100;
+}
+
+/* ==========================================================================
+   Tema escuro (padrão)
+   ========================================================================== */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg:          #030711;   /* navy quase preto */
+  --bg-elev-0:   #050B17;   /* shell / sidebar */
+  --bg-elev-1:   #0A1221;   /* card */
+  --bg-elev-2:   #101C2E;   /* card hover, input */
+  --bg-elev-3:   #18263D;   /* popover, dropdown */
+  --bg-inset:    #050B16;   /* poço: tabela zebra, code */
+
+  --line:        rgba(255,255,255,.07);
+  --line-strong: rgba(255,255,255,.13);
+  --line-brand:  rgba(255,149,0,.34);
+
+  --ink:      #F2F4F8;   /* texto primário */
+  --ink-2:    #A9B1C0;   /* secundário */
+  --ink-3:    #6E7789;   /* terciário / labels */
+  --ink-4:    #4A5164;   /* desabilitado */
+  --ink-on-brand: #1A1000;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-2: 0 4px 16px -4px rgba(0,0,0,.5);
+  --shadow-3: 0 12px 32px -8px rgba(0,0,0,.6), 0 2px 8px rgba(0,0,0,.4);
+  --shadow-4: 0 28px 64px -12px rgba(0,0,0,.72), 0 4px 12px rgba(0,0,0,.45);
+
+  --scrim: rgba(4,5,8,.72);
+  --grid-line: rgba(255,255,255,.055);
+
+  /* brilho ambiente do topo da página */
+  --aura: radial-gradient(100% 50% at 75% -15%, rgba(100,105,240,.065) 0%, transparent 65%);
+}
+
+/* ==========================================================================
+   Tema claro
+   ========================================================================== */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg:          #F6F7F9;
+  --bg-elev-0:   #FFFFFF;
+  --bg-elev-1:   #FFFFFF;
+  --bg-elev-2:   #F3F5F8;
+  --bg-elev-3:   #FFFFFF;
+  --bg-inset:    #F0F2F6;
+
+  --line:        rgba(12,16,26,.09);
+  --line-strong: rgba(12,16,26,.16);
+  --line-brand:  rgba(240,120,0,.38);
+
+  --ink:      #12161F;
+  --ink-2:    #4B5468;
+  --ink-3:    #79839A;
+  --ink-4:    #A9B1C0;
+  --ink-on-brand: #2A1800;
+
+  --brand-500: #ED8500;
+  --brand-600: #D06B00;
+
+  --shadow-1: 0 1px 2px rgba(16,24,40,.06);
+  --shadow-2: 0 4px 14px -4px rgba(16,24,40,.10);
+  --shadow-3: 0 12px 28px -8px rgba(16,24,40,.14), 0 2px 6px rgba(16,24,40,.06);
+  --shadow-4: 0 28px 60px -12px rgba(16,24,40,.20), 0 4px 12px rgba(16,24,40,.08);
+
+  --scrim: rgba(18,22,31,.36);
+  --grid-line: rgba(12,16,26,.07);
+
+  --ok-500: #0EA47C; --bad-500: #DC4545; --warn-500: #C98A00; --info-500: #1E8CD4;
+  --series-2: #1E8CD4; --series-3: #0EA47C; --series-5: #DC4545; --series-6: #C98A00;
+
+  --aura: radial-gradient(120% 60% at 50% -12%, rgba(255,149,0,.13) 0%, rgba(255,149,0,0) 60%);
+}
+
+/* Densidade compacta */
+[data-density="compact"] { --density: .86; }
+
+/* Respeito a preferências de movimento */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 1ms; --dur-2: 1ms; --dur-3: 1ms;
+    --dur-4: 1ms; --dur-5: 1ms;
+  }
+}

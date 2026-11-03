@@ -1,0 +1,52 @@
+/* UX-06: imported by the application stylesheet entry point. */
+.activity-workspace { --activity-gap: 12px; gap: 12px; }
+.activity-workspace .page__head { margin-bottom: 12px; }
+.activity-workspace .activity-toolbar { margin-bottom: 10px; }
+.activity-workspace .activity-toolbar__top { flex-wrap: wrap; gap: 8px; padding: 0 0 8px; }
+.activity-workspace .activity-toolbar__filters { padding: 8px 0; }
+.activity-workspace .activity-search { flex: 1 1 220px; width: auto; }
+.activity-workspace .activity-summary-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+.activity-workspace .activity-summary { min-height: 0; padding: 10px 12px; font: inherit; text-align: left; cursor: pointer; border-radius: 12px; box-shadow: none; }
+.activity-workspace .activity-summary[aria-pressed="true"] { outline: 2px solid var(--brand-500); outline-offset: 1px; }
+.activity-workspace .activity-summary__top { gap: 6px; }
+.activity-workspace .activity-summary__icon { width: 24px; height: 24px; }
+.activity-workspace .activity-summary__value { margin-top: 4px; font-size: 24px; }
+.activity-workspace .activity-summary__sub { margin-top: 4px; }
+.activity-workspace .activity-summary__progress { margin-top: 8px; }
+.activity-workspace .activity-summary__progress small { display: none; }
+.activity-workspace .activity-board { grid-template-columns: minmax(0, 1fr) minmax(250px, 28%); gap: var(--activity-gap); }
+.activity-workspace .activity-board__focus { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--activity-gap); }
+.activity-workspace .activity-board[data-filtered="true"],
+.activity-workspace .activity-board[data-filtered="true"] .activity-board__focus { grid-template-columns: minmax(0, 1fr); }
+.activity-workspace [hidden] { display: none !important; }
+.activity-workspace .activity-kanban__col { min-height: 0; padding: 8px; }
+.activity-workspace .activity-kanban__head { gap: 8px; padding: 4px 0 10px; }
+.activity-workspace .activity-kanban__empty { min-height: 90px; padding: 12px; }
+.activity-workspace .activity-kanban__empty-icon { display: none; }
+.activity-workspace .activity-board__planning { padding: 8px; gap: 8px; }
+.activity-workspace .activity-board__planning-head { padding: 0 0 4px; }
+.activity-workspace .activity-board__planning-head h3 { font-size: 14px; }
+.activity-workspace .activity-card__done { min-width: 32px; min-height: 32px; }
+.activity-workspace .activity-board__planning .activity-card__done { width: auto; padding: 0 8px; }
+.activity-workspace .activity-board__planning .activity-card__done span { display: inline; }
+.activity-workspace .activity-card__due { display: inline; }
+.activity-workspace[data-density="compact"] .activity-card { padding: 10px; }
+.activity-workspace[data-density="compact"] .activity-card__lead { margin-top: 6px; font-size: 14px; }
+.activity-workspace[data-density="compact"] .activity-card__note { margin-top: 6px; padding: 6px; -webkit-line-clamp: 1; }
+.activity-workspace[data-density="compact"] .activity-card__footer { margin-top: 8px; padding-top: 8px; }
+.activity-workspace :is(button, select, input):focus-visible { outline: 2px solid var(--brand-500); outline-offset: 3px; }
+@media (max-width: 1100px) {
+  .activity-workspace .activity-board { grid-template-columns: minmax(0, 1fr); }
+  .activity-workspace .activity-board__planning { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .activity-workspace .activity-board__planning-head { grid-column: 1 / -1; }
+  .activity-workspace .activity-board__focus:has(> .is-empty):not(:has(> :not(.is-empty))) { display: none; }
+}
+@media (max-width: 760px) {
+  .activity-workspace .activity-toolbar__top { flex-direction: row; }
+  .activity-workspace .activity-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .activity-workspace .activity-board__focus,
+  .activity-workspace .activity-board__planning { grid-template-columns: minmax(0, 1fr); }
+  .activity-workspace .activity-kanban__col.is-empty { display: none; }
+  .activity-workspace .activity-board[data-filtered="true"] .activity-kanban__col.is-empty { display: block; }
+  .activity-workspace .activity-board:not(:has(.activity-card)) .activity-kanban__col--today:not([hidden]) { display: block; }
+}

@@ -1,0 +1,42 @@
+project_id = "ascensao-comercial"
+
+[api]
+enabled = true
+port = 54421
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54422
+shadow_port = 54420
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed/demo.sql"]
+
+[studio]
+enabled = true
+port = 54423
+
+[auth]
+enabled = true
+site_url = "http://localhost:5174"
+additional_redirect_urls = ["http://127.0.0.1:5174", "http://localhost:5174"]
+jwt_expiry = 3600
+enable_signup = false
+enable_anonymous_sign_ins = false
+
+[storage]
+enabled = true
+file_size_limit = "25MiB"
+
+[edge_runtime]
+enabled = true
+policy = "per_worker"
+[functions.invite-user]
+verify_jwt = true
+
+[functions.manage-user]
+verify_jwt = true
