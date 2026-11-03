@@ -121,3 +121,9 @@ A base de demonstração comercial também usa serviços de marketing, segmentos
 Os painéis financeiros usam vidro navy com bordas iluminadas, reflexos discretos e degradês nas áreas, barras e distribuições. O laranja permanece como identidade principal; despesas usam azul acinzentado e situações financeiras mantêm suas cores semânticas. Realizado continua sólido e projetado permanece tracejado.
 
 As curvas usam interpolação monotônica para não introduzir picos entre os valores observados. Preenchimentos negativos desaparecem em direção à linha zero. Mini gráficos, legendas, filtros e tabelas mantêm os mesmos dados. As preferências de redução de movimento, transparência e aumento de contraste têm alternativas específicas; impressões usam superfícies opacas.
+
+## Cadastros padrão de gestão financeira
+
+O catálogo `finance-catalog.js` inclui receitas, despesas e centros de custo gerais, com serviços, contratos recorrentes, projetos e vendas. Marketing permanece como uma área opcional da operação.
+
+No primeiro acesso autorizado ao financeiro, o catálogo versão 1 é aplicado ao espaço financeiro pela mesma persistência transacional usada pelos lançamentos, com comparação de revisão e auditoria. IDs existentes são preservados; somente nomes padrão conhecidos são adaptados. Valores, pagamentos e documentos não são modificados. Nomes personalizados permanecem intactos. O marcador de versão impede a recriação automática após exclusões voluntárias. Em Cadastros, a opção Completar cadastros padrão permite recuperar os itens ausentes.

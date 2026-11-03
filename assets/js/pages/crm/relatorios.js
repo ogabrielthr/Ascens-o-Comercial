@@ -160,7 +160,7 @@
           }),
           W.section({
             title: 'Diagnóstico das passagens',
-            sub: 'Comparação com a referência de conversão da agência',
+            sub: 'Comparação com a referência de conversão da empresa',
             body: h('div.col.gap-5', [
               ['Ligação → agendamento', a.convLigAgend, d.convLigAgend, 6,
                 'Se está abaixo, o problema costuma ser abertura da ligação ou qualidade do mailing.'],
@@ -596,7 +596,7 @@
       mp_sumiu:  { icon: 'phone', texto: 'Cliente que some é falha de cadência, não de interesse. Estruture 5 toques em canais diferentes antes de dar como perdido.' },
       mp_desist: { icon: 'lightbulb', texto: 'Desistência costuma esconder objeção não tratada. Vale ouvir a gravação das últimas três e mapear onde o assunto morreu.' },
       mp_recusa: { icon: 'shield', texto: 'Recusa do banco é filtro de crédito. Se está alta, revise o perfil que está entrando no funil e o banco escolhido para cada faixa.' },
-      mp_outro:  { icon: 'clock', texto: 'Compare o prazo de resposta e o valor apresentado pela agência. Meça o intervalo entre a proposta e o primeiro follow-up.' },
+      mp_outro:  { icon: 'clock', texto: 'Compare o prazo de resposta e o valor apresentado pela empresa. Meça o intervalo entre a proposta e o primeiro follow-up.' },
       mp_doc:    { icon: 'filetext', texto: 'Documentação incompleta é processo, não venda. Um checklist enviado junto com a proposta reduz muito esse número.' },
       mp_perfil: { icon: 'filter', texto: 'Fora do perfil no fim do funil significa qualificação fraca no começo. Ajuste o critério de aceite do lead.' }
     };

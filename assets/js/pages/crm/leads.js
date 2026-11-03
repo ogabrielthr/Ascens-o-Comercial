@@ -442,7 +442,7 @@
     node.appendChild(W.pageHead({
       icon: 'building',
       title: 'Empresas',
-      sub: 'Clientes e parceiros que alimentam o funil comercial da agência.',
+      sub: 'Clientes e parceiros que alimentam o funil comercial da empresa.',
       actions: [
         h('div.search', { style: { width: 'min(300px,42vw)' } },
           icon('search'),

@@ -1,6 +1,6 @@
 /* ==========================================================================
    AGIR — seed.js
-   Gera uma base inicial realista de agência de marketing e comunicação.
+   Gera uma base inicial realista de empresa de serviços.
    Determinística (PRNG com semente fixa): a mesma base em toda máquina,
    mas sempre ancorada na data de hoje, então o sistema nunca parece velho.
    ========================================================================== */
@@ -140,7 +140,7 @@
     { id: 'mp_sumiu',   nome: 'Não atende / sumiu' },
     { id: 'mp_desist',  nome: 'Cliente desistiu' },
     { id: 'mp_recusa',  nome: 'Projeto fora do escopo' },
-    { id: 'mp_outro',   nome: 'Fechou com outra agência' },
+    { id: 'mp_outro',   nome: 'Fechou com outra empresa' },
     { id: 'mp_doc',     nome: 'Documentação incompleta' },
     { id: 'mp_perfil',  nome: 'Fora do perfil' }
   ];
@@ -578,7 +578,7 @@
         capa: 'obj', pontosAula: 10, pontosConclusao: 50, ordem: 5,
         aulas: [
           { id: 'au_o1', titulo: '"Vou pensar" — o que fazer de verdade', duracaoMin: 12, autor: 'Ascensão Comercial' },
-          { id: 'au_o2', titulo: '"Já tenho outra agência" e a proposta de valor', duracaoMin: 19, autor: 'Ascensão Comercial' },
+          { id: 'au_o2', titulo: '"Já tenho outra empresa" e a proposta de valor', duracaoMin: 19, autor: 'Ascensão Comercial' },
           { id: 'au_o3', titulo: 'Cadência de follow up que não queima o lead', duracaoMin: 14, autor: 'Ascensão Comercial' }
         ]
       }
@@ -670,7 +670,7 @@
       { categoriaId: 'ca_scr',  nome: 'Matriz de objeções — 9 mais comuns.xlsx', tipo: 'xls', tamanho: 132000 },
       { categoriaId: 'ca_prop', nome: 'Modelo de proposta — Projetos digitais.pdf', tipo: 'pdf', tamanho: 410000 },
       { categoriaId: 'ca_carr', nome: 'Plano de carreira comercial 2026.pdf', tipo: 'pdf', tamanho: 780000 },
-      { categoriaId: 'ca_vaga', nome: 'Descritivo — BDR de agência.pdf', tipo: 'pdf', tamanho: 190000 },
+      { categoriaId: 'ca_vaga', nome: 'Descritivo — BDR comercial.pdf', tipo: 'pdf', tamanho: 190000 },
       { categoriaId: 'ca_proc', nome: 'Fluxo de formalização do projeto passo a passo.pdf', tipo: 'pdf', tamanho: 350000 },
       { categoriaId: 'ca_plan', nome: 'Planejamento comercial — S2 2026.pptx', tipo: 'ppt', tamanho: 5200000 }
     ].map(function (f) {
@@ -1000,7 +1000,7 @@
         nome: 'Ascensão Comercial', razao: '',
         cnpj: '', site: '',
         telefone: '', cidade: '', uf: '',
-        segmento: 'Agência de marketing e comunicação',
+        segmento: 'Empresa de serviços',
         fundacao: ''
       },
       cargos: cargos,

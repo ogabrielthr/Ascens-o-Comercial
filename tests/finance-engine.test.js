@@ -43,6 +43,7 @@ function harness(options = {}) {
     CustomEvent: class { constructor(type, init) { this.type = type; this.detail = init.detail; } }, dispatchEvent: event => events.push(event)
   };
   global.window = global;
+  if (options.catalog) vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../assets/js/core/finance-catalog.js'), 'utf8'), global);
   if (options.agency) vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../assets/js/core/agency-domain.js'), 'utf8'), global);
   vm.runInNewContext(source, global, { filename: 'finance.js' });
   return { fin: global.AGIR.fin, repo, global, memory, events, saved: () => plain(saved), saveCount: () => saveCount,
@@ -351,3 +352,35 @@ test('agency context is atomic on failed persistence and restricted to administr
   const seller = await setup({ saved: original.saved(), agency: true, role: 'seller' });
   await assert.rejects(seller.fin.command('workspace.applyAgencyContext', {}), { code: 'FORBIDDEN' });
 });
+
+test('standard financial catalogs initialize existing workspaces once and preserve ledger and custom names', async () => {
+  const original = await setup();
+  await title(original);
+  const saved = original.saved();
+  saved.planoContas.push({id:'pc_soft',nome:'Minha ferramenta personalizada',tipo:'despesa',grupo:'Custo fixo'});
+  saved.planoContas.push({id:'pc_com_inss',nome:'Contratos mensais de marketing',tipo:'receita',grupo:'Receita operacional'});
+  const before = plain(saved.lancamentos);
+  const h = await setup({saved,catalog:true,production:true});
+  assert.deepEqual(plain(h.fin.state().lancamentos),before);
+  assert.equal(h.fin.state().planoContas.find(x=>x.id==='pc_soft').nome,'Minha ferramenta personalizada');
+  assert.equal(h.fin.state().planoContas.find(x=>x.id==='pc_com_inss').nome,'Contratos recorrentes');
+  assert.ok(h.fin.state().centrosCusto.some(x=>x.nome==='Administrativo e financeiro'));
+  assert.ok(h.fin.state().planoContas.some(x=>x.nome==='Prestação de serviços'));
+  assert.equal(h.fin.state().auditoria.at(-1).action,'catalog.applyStandard');
+  const reloaded = await setup({saved:h.saved(),catalog:true,production:true});
+  assert.equal(reloaded.saveCount(),0);
+  assert.equal(reloaded.fin.state().revision,h.fin.state().revision);
+});
+
+test('standard catalog migration fails atomically and preserves existing workspace on retry', async () => {
+  const original=await setup(), h=harness({saved:original.saved(),catalog:true});
+  h.fail('OFFLINE');
+  await assert.rejects(h.fin.ready(),{code:'OFFLINE'});
+  assert.deepEqual(h.saved(),original.saved());
+  h.recover(); await h.fin.ready();
+  assert.equal(h.fin.state().standardCatalogVersion,1);
+  const seller=await setup({saved:original.saved(),catalog:true,role:'seller'});
+  assert.equal(seller.saveCount(),0);
+  await assert.rejects(seller.fin.command('catalog.applyStandard',{}),{code:'FORBIDDEN'});
+});
+

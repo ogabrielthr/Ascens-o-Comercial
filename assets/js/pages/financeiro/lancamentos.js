@@ -198,7 +198,7 @@
         h('div.field',
           h('label.field__label', { text: 'Descrição' }),
           f.descricao = h('input.input', {
-            value: l ? l.descricao : '', placeholder: 'Ex.: Contrato mensal de marketing', autofocus: true
+            value: l ? l.descricao : '', placeholder: 'Ex.: Prestação de serviços mensal', autofocus: true
           })
         ),
         h('div.grid.g-3',

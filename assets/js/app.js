@@ -55,7 +55,7 @@
     {
       id: 'financeiro', nome: 'Financeiro', tag: 'Gestão', icone: 'wallet',
       home: '/financeiro/visao', palavra: 'FINANCEIRO',
-      desc: 'DRE, fluxo de caixa, lançamentos, orçamento e retorno de marketing.',
+      desc: 'Gestão financeira, DRE, fluxo de caixa, lançamentos e orçamento.',
       cover: 'linear-gradient(150deg,#0A1D2B 0%,#0E1015 62%)',
       glow: 'rgba(90,185,245,.20)',
       nav: [

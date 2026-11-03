@@ -1440,6 +1440,7 @@ const coreScripts = [
   'assets/js/core/format.js',
   'assets/js/core/lead-io.js',
   'assets/js/core/agency-domain.js',
+  'assets/js/core/finance-catalog.js',
   'assets/js/core/store.js',
   'assets/js/core/analytics.js',
   'assets/js/core/charts.js',

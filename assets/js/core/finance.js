@@ -221,13 +221,23 @@
         var legacy = production ? (repo.loadLegacy ? await repo.loadLegacy() : null) : (AGIR.store && AGIR.store.get ? AGIR.store.get('financeiro') : null);
         assert(epoch === sessionEpoch, 'SESSION_CHANGED', 'A sessão foi alterada. Abra novamente o financeiro.');
         assert(!legacy || !legacy.external, 'MISSING_DATABASE', 'O banco financeiro deste navegador não foi encontrado. Restaure um backup ou retorne ao navegador onde os dados foram salvos.');
-        var migrated = normalize(legacy);if(!production&&AGIR.agencyDomain)AGIR.agencyDomain.applyFinance(migrated);if(!production&&migrated.planoContas.some(function(c){return c.id==='pc_mkt'&&c.tipo==='despesa';}))applyAgencyExpenseTemplate(migrated);validate(migrated);
+        var migrated = normalize(legacy);if(!production&&AGIR.agencyDomain)AGIR.agencyDomain.applyFinance(migrated);if(!production&&migrated.planoContas.some(function(c){return c.id==='pc_mkt'&&c.tipo==='despesa';}))applyAgencyExpenseTemplate(migrated);if(AGIR.financeCatalog)AGIR.financeCatalog.apply(migrated);validate(migrated);
         if (!production && legacy && !legacy.schemaVersion && global.AGIR_BACKEND && global.AGIR_BACKEND.mode === 'demo' && AGIR.store && AGIR.store.get && AGIR.store.get('meta.seededAt')) migrated.seededFromDemo = true;
         migrated.revision = 1; migrated.updatedAt = new Date().toISOString();
         var saved = await repo.save(clone(migrated), { expectedRevision: 0 }); raw = saved && saved.schemaVersion === 2 ? saved : migrated;
       }
       assert(epoch === sessionEpoch, 'SESSION_CHANGED', 'A sessão foi alterada. Abra novamente o financeiro.');
-      publish(validate(normalize(raw))); return clone(current);
+      var loaded = validate(normalize(raw));
+      if (AGIR.financeCatalog && loaded.standardCatalogVersion !== 1 && /^(admin|administrator|administrador|owner|finance|financeiro|gestor|diretor)$/i.test(actor().role)) {
+        var expected = loaded.revision, changes = AGIR.financeCatalog.apply(loaded);
+        loaded.revision = expected + 1; loaded.updatedAt = new Date().toISOString();
+        loaded.auditoria.push({id:uid('audit'),action:'catalog.applyStandard',actorId:actor().id,at:loaded.updatedAt,revision:loaded.revision,details:changes});
+        validate(loaded);
+        var confirmed = await repo.save(clone(loaded), {expectedRevision:expected});
+        assert(epoch === sessionEpoch, 'SESSION_CHANGED', 'A sessão foi alterada durante a atualização dos cadastros.');
+        if(confirmed && confirmed.schemaVersion===2)loaded=validate(normalize(confirmed));
+      }
+      publish(loaded); return clone(current);
     })().catch(function (e) { if (epoch === sessionEpoch) { readyPromise = null; repository = null; } throw e; });
     return readyPromise;
   }
@@ -415,6 +425,7 @@
       payment.estornado = true; payment.estornadoEm = new Date().toISOString(); payment.motivoEstorno = p.motivo; s.conciliacoes.filter(function (c) { return c.paymentId === payment.id && c.entryId === e.id && !c.cancelado; }).forEach(function (c) { c.cancelado = true; c.motivo = 'Estorno do pagamento'; }); return payment;
     }
     if (action === 'entry.approve' || action === 'entry.reject') { admin(); e = required(s, 'lancamentos', p.id); lockEntry(s, e); assert(!e.cancelado && !activePayments(e).length, 'PAID_ENTRY', 'Não é possível alterar a aprovação de título cancelado ou com pagamentos.'); e.aprovacao = action === 'entry.approve' ? 'aprovada' : 'rejeitada'; e.aprovadoPor = actor().id; e.aprovadoEm = new Date().toISOString(); e.motivoAprovacao = p.motivo || ''; return e; }
+    if(action==='catalog.applyStandard'){admin();assert(AGIR.financeCatalog,'UPDATE_REQUIRED','Atualize a página para carregar os cadastros padrão.');return AGIR.financeCatalog.apply(s);}
     if(action==='workspace.applyAgencyContext'){admin();assert(AGIR.agencyDomain,'UPDATE_REQUIRED','Atualize a página para carregar o contexto da agência.');return AGIR.agencyDomain.applyFinance(s);}
     if(action==='category.applyAgencyTemplate'){admin();return applyAgencyExpenseTemplate(s);}
     var lookup = { account: ['contasBancarias', 'bank'], contact: ['contatos', 'contact'], category: ['planoContas', 'category'], costCenter: ['centrosCusto', 'center'] }, parts = action.split('.');
@@ -483,7 +494,7 @@
       assert(epoch === sessionEpoch, 'SESSION_CHANGED', 'A sessão foi alterada. Abra novamente o financeiro.');
       await ready(); assert(epoch === sessionEpoch, 'SESSION_CHANGED', 'A sessão foi alterada. Abra novamente o financeiro.'); var repo = repository, draft = clone(current), previous = current.revision, data = mutate(draft, action, clone(payload || {}));
       draft.revision = previous + 1; draft.updatedAt = new Date().toISOString();
-      var auditPayload = (action==='category.applyAgencyTemplate'||action==='workspace.applyAgencyContext')?clone(data):clone(payload || {}); if (auditPayload.text) auditPayload.text = '[extrato importado]'; if (auditPayload.state) auditPayload.state = '[backup restaurado]';
+      var auditPayload = (action==='catalog.applyStandard'||action==='category.applyAgencyTemplate'||action==='workspace.applyAgencyContext')?clone(data):clone(payload || {}); if (auditPayload.text) auditPayload.text = '[extrato importado]'; if (auditPayload.state) auditPayload.state = '[backup restaurado]';
       draft.auditoria.push({ id: uid('audit'), action: action, actorId: actor().id, at: draft.updatedAt, revision: draft.revision, entityId: payload && (payload.id || payload.entryId || payload.statementId) || data && data.id || null, details: auditPayload });
       validate(draft); var saved = await repo.save(clone(draft), { expectedRevision: previous }); if (saved && saved.schemaVersion === 2) draft = validate(normalize(saved));
       assert(epoch === sessionEpoch, 'SESSION_CHANGED', 'A sessão foi alterada durante a gravação. Reabra o financeiro para confirmar o resultado.');
@@ -493,5 +504,5 @@
   }
   function reload() { var epoch = sessionEpoch; return queue.then(async function () { await ready(); var repo = repository, s = await repo.load(); assert(epoch === sessionEpoch, 'SESSION_CHANGED', 'A sessão foi alterada.'); assert(s, 'MISSING_DATABASE', 'O banco financeiro não foi encontrado.'); publish(validate(normalize(s))); return state(); }); }
   function resetSession() { sessionEpoch++; current = null; readyPromise = null; repository = null; queue = Promise.resolve(); }
-  AGIR.fin = { ready: ready, state: state, command: command, entries: entries, summary: summary, dre: dre, cashflow: cashflow, balance: balance, report: report, agencyContextPlan:function(){return AGIR.agencyDomain?clone(AGIR.agencyDomain.financePlan(current)):null;}, agencyExpenseTemplatePlan:function(){return clone(agencyExpenseTemplatePlan(current));}, parseStatement: parseStatement, toCents: toCents, reload: reload, resetSession: resetSession, today: today };
+  AGIR.fin = { ready: ready, state: state, command: command, entries: entries, summary: summary, dre: dre, cashflow: cashflow, balance: balance, report: report, standardCatalogPlan:function(){return AGIR.financeCatalog?clone(AGIR.financeCatalog.plan(current)):null;}, agencyContextPlan:function(){return AGIR.agencyDomain?clone(AGIR.agencyDomain.financePlan(current)):null;}, agencyExpenseTemplatePlan:function(){return clone(agencyExpenseTemplatePlan(current));}, parseStatement: parseStatement, toCents: toCents, reload: reload, resetSession: resetSession, today: today };
 })(window);

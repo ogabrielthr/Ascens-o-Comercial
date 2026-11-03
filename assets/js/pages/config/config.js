@@ -790,7 +790,7 @@
     function abaConvenios() {
       return listaEditavel({
         titulo: 'Segmentos de clientes',
-        sub: 'Áreas de atuação das empresas atendidas pela agência. O preenchimento no lead é opcional.',
+        sub: 'Áreas de atuação das empresas atendidas pela empresa. O preenchimento no lead é opcional.',
         path: 'convenios',
         catalog: 'conventions',
         colunas: [
